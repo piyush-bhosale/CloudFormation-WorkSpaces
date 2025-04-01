@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation Template to Create AWS WorkSpace
+
+Parameters:
+  DirectoryId:
+    Type: String
+    Description: The ID of the AWS Directory Service directory (Simple AD, AD Connector, or AWS Managed Microsoft AD)
+  UserName:
+    Type: String
+    Description: The user name of the user for the WorkSpace
+  BundleId:
+    Type: String
+    Description: The ID of the WorkSpace bundle (e.g., wsb-b0s22j3d7)
+
+Resources:
+  MyWorkspace:
+    Type: AWS::WorkSpaces::Workspace
+    Properties:
+      BundleId: !Ref BundleId
+      DirectoryId: !Ref DirectoryId
+      UserName: !Ref UserName
+      WorkspaceProperties:
+        RunningMode: AUTO_STOP
+        RunningModeAutoStopTimeoutInMinutes: 60
+        RootVolumeSizeGib: 80
+        UserVolumeSizeGib: 50
+      Tags:
+        - Key: Name
+          Value: MyCloudWorkspace
+        - Key: Environment
+          Value: Dev
+
+Outputs:
+  WorkspaceId:
+    Description: The ID of the created WorkSpace
+    Value: !Ref MyWorkspace
