@@ -1,31 +1,55 @@
-📌 About This CloudFormation Template
-This CloudFormation template automates the provisioning of an AWS WorkSpace, a managed virtual desktop (DaaS) solution provided by AWS. It enables administrators to quickly deploy secure, scalable, and cost-effective virtual desktops for their users.
+# AWS CloudFormation Template – WorkSpaces Provisioning
 
-🔧 What the Template Does:
-Creates a WorkSpace for a specific user within an existing AWS Directory Service domain (e.g., Simple AD, AD Connector, or AWS Managed Microsoft AD).
+## 🖥️ Project Overview
 
-Accepts key parameters such as:
+This CloudFormation template automates the provisioning of an **AWS WorkSpace**, a managed Desktop-as-a-Service (DaaS) solution offered by AWS. It enables organizations to quickly deploy **secure, scalable, and cost-efficient virtual desktops** for users within a directory-managed environment.
 
-DirectoryId: The ID of the AWS Directory the WorkSpace is joined to.
+This setup is ideal for remote teams, dev/test environments, or enterprise desktop provisioning.
 
-UserName: The user for whom the WorkSpace is being provisioned.
+---
 
-BundleId: The hardware and software configuration of the WorkSpace (e.g., Windows 10, performance specs).
+## 📄 Template Summary
 
-Configures Workspace properties like:
+The template creates an **AWS WorkSpace** for a specific user within an existing **AWS Directory Service domain**, such as:
+- Simple AD
+- AD Connector
+- AWS Managed Microsoft AD
 
-Running Mode set to AUTO_STOP to save costs when not in use.
+---
 
-Timeout set to 60 minutes for auto-stopping the WorkSpace after inactivity.
+## ⚙️ Parameters Required
 
-Disk sizes for root (80 GB) and user volumes (50 GB).
+| Parameter    | Description |
+|--------------|-------------|
+| `DirectoryId` | ID of the AWS Directory (e.g., `d-xxxxxxxxx`) |
+| `UserName`    | User for whom the WorkSpace is being provisioned |
+| `BundleId`    | AWS WorkSpace bundle ID (e.g., `wsb-xxxxxxxx`) |
 
-Adds resource tags for better environment tracking (Name, Environment).
+---
 
-✅ Benefits:
-Simplifies the creation of AWS WorkSpaces using Infrastructure as Code (IaC).
+## 🧱 WorkSpace Configuration
 
-Fully deployable in AWS CloudFormation Console, AWS CLI, or through CI/CD pipelines.
+- **Running Mode:** `AUTO_STOP`  
+- **Auto-stop Timeout:** 60 minutes  
+- **Root Volume Size:** 80 GB  
+- **User Volume Size:** 50 GB  
+- **Tags:** `Name`, `Environment`
 
-Enables consistent, repeatable provisioning for enterprise or development environments.
+---
 
+## 🚀 How to Deploy
+
+### 1. Upload via AWS Console
+- Go to **CloudFormation > Create Stack**
+- Upload the file: `aws-workspace-template.yaml`
+- Fill in the required parameters
+
+### 2. Deploy via AWS CLI
+```bash
+aws cloudformation create-stack \
+  --stack-name WorkspaceStack \
+  --template-body file://aws-workspace-template.yaml \
+  --parameters \
+    ParameterKey=DirectoryId,ParameterValue=d-xxxxxx \
+    ParameterKey=UserName,ParameterValue=johndoe \
+    ParameterKey=BundleId,ParameterValue=wsb-xxxxxx
